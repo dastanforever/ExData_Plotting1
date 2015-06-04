@@ -1,0 +1,13 @@
+HouseHoldTable <- read.table("household_power_consumption.txt", sep=";",header=TRUE,nrows=10)
+classes <- sapply(HouseHoldTable,class)
+classes[1:2] <- 'character'
+HouseHoldTable <- read.table(file = "household_power_consumption.txt", sep=";", header=TRUE, colClasses = classes, na.strings = '?')
+TestTable <- subset(HouseHoldTable, as.Date(HouseHoldTable$Date, format = '%d/%m/%Y') >= as.Date('2007-02-01'))
+TestTable <- subset(TestTable, as.Date(TestTable$Date, format = '%d/%m/%Y') <= as.Date('2007-02-02'))
+TestTable$DateTime <- c(NA)
+TestTable$DateTime <- paste(TestTable$Date,TestTable$Time,sep='T')
+TestTable$DateTime <- as.POSIXct(TestTable$DateTime, format="%d/%m/%YT%H:%M:%S")
+png(filename ="plot2.png", width = 480, height = 480, units = "px")
+plot(TestTable$DateTime,TestTable$Global_active_power,type='n',xlab = "",ylab = "Global Active Power (kilowatts)")
+lines(TestTable$DateTime,TestTable$Global_active_power)
+dev.off()
